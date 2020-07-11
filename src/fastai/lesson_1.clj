@@ -7,6 +7,9 @@
 
 (py/initialize!)
 
+;; See https://forums.fast.ai/t/fastai-throwing-a-runtime-error-when-using-custom-train-test-sets/70262/30
+(py.. (py/import-module "warnings") (filterwarnings "ignore"))
+
 (require-python 'sys
                 'torch
                 'fastai
@@ -60,3 +63,7 @@
 ;; https://forums.fast.ai/t/lesson-1-official-resources-and-updates/27936/7
 ;; ConvLearner replaced by cnn_learner
 (def learn (learner/cnn_learner data models/resnet34 :metrics vision/error_rate))
+
+(py.. learn (fit_one_cycle 4))
+
+(py.. learn (save "stage-1"))
