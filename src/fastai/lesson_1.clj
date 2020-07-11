@@ -11,6 +11,8 @@
                 'torch
                 'fastai
                 '[fastai.vision :as vision]
+                '[fastai.vision.learner :as learner]
+                '[fastai.vision.learner.models :as models]
                 '[matplotlib]
                 '[matplotlib.pyplot :as plt]
                 '[PIL :refer [Image]]
@@ -44,3 +46,17 @@
                                                           :ds_tfms (vision/get_transforms)
                                                           :size 224))
             (py.. (normalize vision/imagenet_stats))))
+
+(py.. data (show_batch :rows 3 :figsize [7 6]))
+#_ (plt/show)
+
+(py.. data -classes)
+
+(= (count (py.. data -classes))
+   (py.. data -c)
+   37)
+
+;; https://forums.fast.ai/t/fixing-notebook-1-convlearner-not-found/28367
+;; https://forums.fast.ai/t/lesson-1-official-resources-and-updates/27936/7
+;; ConvLearner replaced by cnn_learner
+(def learn (learner/cnn_learner data models/resnet34 :metrics vision/error_rate))
